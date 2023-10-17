@@ -7,7 +7,7 @@ pub struct User {
     pass: String,
 } 
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Product{
     id: u32,
     name: u32,

@@ -40,7 +40,7 @@ async fn delete_user(client: web::Data<Client>, path: web::Path<String>) -> impl
 
 #[post("/")]
 async fn add_user(client: web::Data<Client>, user: web::Json<User>) -> impl Responder {
-    match client.database(DB_NAME).collection(COLL_NAME).insert_one(user, None).await {
+    match client.database(DB_NAME).collection::<User>(COLL_NAME).insert_one(user.into_inner(), None).await {
         Ok(_) => HttpResponse::Ok().json("User Added"),
         Err(_) => HttpResponse::InternalServerError().json("Unable to add user")
     }
