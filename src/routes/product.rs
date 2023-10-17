@@ -1,4 +1,4 @@
-use actix_web::{delete, post, get, web, Responder, HttpResponse};
+use actix_web::{delete, post, get, web, Responder, HttpResponse, Scope};
 use mongodb::{Client, bson::doc};
 use crate::models::Product;
 
@@ -33,5 +33,12 @@ async fn add_product(client: web::Data<Client>, product: web::Json<Product>) -> 
         Ok(_) => HttpResponse::Ok().json("Product Added"),
         Err(_) => HttpResponse::InternalServerError().json("Unable to add product")
     }
+}
+
+pub fn product_api() -> Scope {
+    return web::scope("/product")
+        .service(get_product)
+        .service(delete_product)
+        .service(add_product)
 }
 
