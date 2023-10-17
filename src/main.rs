@@ -1,9 +1,10 @@
-use actix_web::{web, middleware::Logger, HttpServer, App, Responder};
+use actix_web::{web, middleware::Logger, HttpServer, App};
 use db::Db;
 use env_logger::Env;
 mod models;
 mod db;
 mod routes;
+use crate::routes::auth;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()>{
@@ -16,6 +17,6 @@ async fn main() -> std::io::Result<()>{
         App::new().wrap(Logger::default())
             .app_data(web::Data::new(db.get_db().clone()))
             .app_data(web::JsonConfig::default().limit(4096))
-            .service(web::scope("/api").service(routes::home))
+            .service(auth::auth())
     }).bind(("127.0.0.1", 8080))?.run().await
 }
